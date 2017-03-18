@@ -1,0 +1,5 @@
+
+CREATE USER 'shop'@'localhost' IDENTIFIED BY 'shop';
+GRANT ALL PRIVILEGES ON *.* TO 'shop'@'localhost' WITH GRANT OPTION;
+CREATE USER 'shop'@'%' IDENTIFIED BY 'shop';
+GRANT ALL PRIVILEGES ON *.* TO 'shop'@'%' WITH GRANT OPTION;
