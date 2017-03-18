@@ -1,4 +1,4 @@
-package com.cn.kz.tech;
+package com.cn.kz.tech.shop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

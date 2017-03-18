@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="persistenceUnit">
+        <class>com.cn.kz.tech.shop.model.Account</class>
+        <class>com.cn.kz.tech.shop.model.Category</class>
+        <class>com.cn.kz.tech.shop.model.OrderItem</class>
+        <class>com.cn.kz.tech.shop.model.Order</class>
+        <class>com.cn.kz.tech.shop.model.Price</class>
+        <class>com.cn.kz.tech.shop.model.Product</class>
+        <class>com.cn.kz.tech.shop.model.Role</class>
+        <class>com.cn.kz.tech.shop.model.User</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/shop"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+        </properties>
+    </persistence-unit>
+</persistence>
