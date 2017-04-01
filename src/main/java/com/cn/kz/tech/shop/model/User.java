@@ -1,5 +1,7 @@
 package com.cn.kz.tech.shop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -7,24 +9,14 @@ import java.util.Collection;
  * Created by kz on 18.03.17.
  */
 @Entity
-public class User {
-    private long userId;
+public class User extends BaseObject {
     private String phone;
     private String firstName;
     private String lastName;
     private String email;
+
+    @JsonIgnore
     private Collection<Order> orderssByUserId;
-    private Account accountByUserId;
-
-    @Id
-    @Column(name = "user_id")
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
 
     @Basic
     @Column(name = "phone")
@@ -73,7 +65,7 @@ public class User {
 
         User user = (User) o;
 
-        if (userId != user.userId) return false;
+        if (id != user.id) return false;
         if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
         if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
@@ -84,7 +76,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        int result = (int) (userId ^ (userId >>> 32));
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
@@ -101,13 +93,4 @@ public class User {
         this.orderssByUserId = orderssByUserId;
     }
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
-    public Account getAccountByUserId() {
-        return accountByUserId;
-    }
-
-    public void setAccountByUserId(Account accountByUserId) {
-        this.accountByUserId = accountByUserId;
-    }
 }

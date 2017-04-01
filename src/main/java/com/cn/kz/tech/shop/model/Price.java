@@ -8,22 +8,11 @@ import java.util.Collection;
  * Created by kz on 18.03.17.
  */
 @Entity
-public class Price {
-    private long priceId;
+public class Price extends BaseObject {
     private int price;
     private Date date;
     private Collection<OrderItem> orderItemsByPriceId;
     private Product productByProductId;
-
-    @Id
-    @Column(name = "price_id")
-    public long getPriceId() {
-        return priceId;
-    }
-
-    public void setPriceId(long priceId) {
-        this.priceId = priceId;
-    }
 
     @Basic
     @Column(name = "price")
@@ -52,7 +41,7 @@ public class Price {
 
         Price price1 = (Price) o;
 
-        if (priceId != price1.priceId) return false;
+        if (id != price1.id) return false;
         if (price != price1.price) return false;
         if (date != null ? !date.equals(price1.date) : price1.date != null) return false;
 
@@ -61,7 +50,7 @@ public class Price {
 
     @Override
     public int hashCode() {
-        int result = (int) (priceId ^ (priceId >>> 32));
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + price;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
@@ -77,7 +66,7 @@ public class Price {
     }
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     public Product getProductByProductId() {
         return productByProductId;
     }

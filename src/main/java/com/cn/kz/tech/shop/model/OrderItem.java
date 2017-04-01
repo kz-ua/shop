@@ -6,23 +6,12 @@ import javax.persistence.*;
  * Created by kz on 18.03.17.
  */
 @Entity
-@Table(name = "order_item", schema = "shop", catalog = "")
-public class OrderItem {
-    private long orderItemId;
+@Table(name = "order_item", schema = "shop")
+public class OrderItem extends BaseObject {
     private short amount;
     private Order orderByOrderId;
     private Product productByProductId;
     private Price priceByPriceId;
-
-    @Id
-    @Column(name = "order_item_id")
-    public long getOrderItemId() {
-        return orderItemId;
-    }
-
-    public void setOrderItemId(long orderItemId) {
-        this.orderItemId = orderItemId;
-    }
 
     @Basic
     @Column(name = "amount")
@@ -41,7 +30,7 @@ public class OrderItem {
 
         OrderItem orderItem = (OrderItem) o;
 
-        if (orderItemId != orderItem.orderItemId) return false;
+        if (id != orderItem.id) return false;
         if (amount != orderItem.amount) return false;
 
         return true;
@@ -49,13 +38,13 @@ public class OrderItem {
 
     @Override
     public int hashCode() {
-        int result = (int) (orderItemId ^ (orderItemId >>> 32));
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) amount;
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
     public Order getOrderByOrderId() {
         return orderByOrderId;
     }
@@ -65,7 +54,7 @@ public class OrderItem {
     }
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     public Product getProductByProductId() {
         return productByProductId;
     }
@@ -75,7 +64,7 @@ public class OrderItem {
     }
 
     @ManyToOne
-    @JoinColumn(name = "price_id", referencedColumnName = "price_id", nullable = false)
+    @JoinColumn(name = "price_id", referencedColumnName = "id", nullable = false)
     public Price getPriceByPriceId() {
         return priceByPriceId;
     }

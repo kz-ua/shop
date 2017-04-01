@@ -7,23 +7,12 @@ import java.util.Collection;
  * Created by kz on 18.03.17.
  */
 @Entity
-public class Product {
-    private long productId;
+public class Product extends BaseObject {
     private String name;
     private String description;
     private Collection<OrderItem> orderItemsByProductId;
     private Collection<Price> pricesByProductId;
     private Category categoryByCategoryId;
-
-    @Id
-    @Column(name = "product_id")
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
 
     @Basic
     @Column(name = "name")
@@ -52,7 +41,7 @@ public class Product {
 
         Product product = (Product) o;
 
-        if (productId != product.productId) return false;
+        if (id != product.id) return false;
         if (name != null ? !name.equals(product.name) : product.name != null) return false;
         if (description != null ? !description.equals(product.description) : product.description != null) return false;
 
@@ -61,7 +50,7 @@ public class Product {
 
     @Override
     public int hashCode() {
-        int result = (int) (productId ^ (productId >>> 32));
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
@@ -86,7 +75,7 @@ public class Product {
     }
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     public Category getCategoryByCategoryId() {
         return categoryByCategoryId;
     }

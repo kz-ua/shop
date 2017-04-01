@@ -1,26 +1,34 @@
 package com.cn.kz.tech.shop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.ToString;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.*;
 
 /**
  * Created by kz on 18.03.17.
  */
+@ToString(exclude = "password")
 @Entity
-public class Account {
-    private long userId;
-    private String username;
-    private String passwdHash;
-    private Role roleByRoleId;
-    private User userByUserId;
+public class Account extends BaseObject {
+    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
-    @Id
-    @Column(name = "user_id")
-    public long getUserId() {
-        return userId;
+    private String username;
+    @JsonIgnore
+    private String password;
+    private String role;
+    private Long userId;
+
+    public Account(String username, String password, String role, Long userId) {
+        this.username = username;
+        this.setPassword(password);
+        this.role = role;
+        this.userId = userId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public Account() {
     }
 
     @Basic
@@ -34,13 +42,33 @@ public class Account {
     }
 
     @Basic
-    @Column(name = "passwd_hash")
-    public String getPasswdHash() {
-        return passwdHash;
+    @Column(name = "password")
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswdHash(String passwdHash) {
-        this.passwdHash = passwdHash;
+    public void setPassword(String password) {
+        this.password = PASSWORD_ENCODER.encode(password);
+    }
+
+    @Basic
+    @Column(name = "role")
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+
+    @Column(name = "user_id")
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -50,37 +78,18 @@ public class Account {
 
         Account account = (Account) o;
 
-        if (userId != account.userId) return false;
+        if (id != account.id) return false;
         if (username != null ? !username.equals(account.username) : account.username != null) return false;
-        if (passwdHash != null ? !passwdHash.equals(account.passwdHash) : account.passwdHash != null) return false;
-
-        return true;
+        if (password != null ? !password.equals(account.password) : account.password != null) return false;
+        return role != null ? role.equals(account.role) : account.role == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (userId ^ (userId >>> 32));
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (passwdHash != null ? passwdHash.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
-    public Role getRoleByRoleId() {
-        return roleByRoleId;
-    }
-
-    public void setRoleByRoleId(Role roleByRoleId) {
-        this.roleByRoleId = roleByRoleId;
-    }
-
-    @OneToOne(mappedBy = "accountByUserId")
-    public User getUserByUserId() {
-        return userByUserId;
-    }
-
-    public void setUserByUserId(User userByUserId) {
-        this.userByUserId = userByUserId;
     }
 }

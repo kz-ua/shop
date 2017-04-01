@@ -7,20 +7,9 @@ import java.util.Collection;
  * Created by kz on 18.03.17.
  */
 @Entity
-public class Category {
-    private long categoryId;
+public class Category extends BaseObject{
     private String name;
     private Collection<Product> productsByCategoryId;
-
-    @Id
-    @Column(name = "category_id")
-    public long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
-    }
 
     @Basic
     @Column(name = "name")
@@ -39,7 +28,7 @@ public class Category {
 
         Category category = (Category) o;
 
-        if (categoryId != category.categoryId) return false;
+        if (id != category.id) return false;
         if (name != null ? !name.equals(category.name) : category.name != null) return false;
 
         return true;
@@ -47,7 +36,7 @@ public class Category {
 
     @Override
     public int hashCode() {
-        int result = (int) (categoryId ^ (categoryId >>> 32));
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
