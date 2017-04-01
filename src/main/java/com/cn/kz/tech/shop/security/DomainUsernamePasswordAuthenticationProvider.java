@@ -1,5 +1,6 @@
 package com.cn.kz.tech.shop.security;
 
+import com.cn.kz.tech.shop.model.Account;
 import com.cn.kz.tech.shop.security.token.AuthenticationWithToken;
 import com.cn.kz.tech.shop.security.token.jwt.JwtUtil;
 import com.google.common.base.Optional;
@@ -36,12 +37,12 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
             throw new UsernameNotFoundException("Unknown username");
         }
 
-        if (!user.getPassword().equals(password.get())){
+        if (!Account.PASSWORD_ENCODER.matches(password.get(), user.getPassword())){
             throw new BadCredentialsException("Wrong username or password");
         }
 
         AuthenticationWithToken resultOfAuthentication = new AuthenticationWithToken(user);
-        String newToken = jwtUtil.generateToken(null);
+        String newToken = jwtUtil.generateToken(user);
         resultOfAuthentication.setToken(newToken);
         //tokenService.store(newToken, resultOfAuthentication);
 
