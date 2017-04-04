@@ -7,11 +7,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by kz on 31.03.17.
@@ -41,10 +40,14 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
 
+
+            Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+            Collection authorities = (Collection) body.get(CLAIM_KEY_ROLE);
+            authorities.forEach(o -> grantedAuthorities.add(new SimpleGrantedAuthority((String) ((Map)o).get("authority"))));
             AuthenticatedUser user = new AuthenticatedUser(Long.parseLong((String) body.get(CLAIM_KEY_ACCOUNT_ID)),
                     (String) body.get(CLAIM_KEY_USERNAME),
                     null,
-                    (Collection<? extends GrantedAuthority>) body.get(CLAIM_KEY_ROLE));
+                    grantedAuthorities );
 
             return user;
 
@@ -62,10 +65,10 @@ public class JwtUtil {
      */
     public String generateToken(AuthenticatedUser user) {
         Claims claims = Jwts.claims().setId(UUID.randomUUID().toString());
-        claims.put(CLAIM_KEY_ACCOUNT_ID, user.getId());
+        claims.put(CLAIM_KEY_ACCOUNT_ID, String.valueOf(user.getId()));
         claims.put(CLAIM_KEY_USERNAME, user.getUsername());
         claims.put(CLAIM_KEY_ROLE, user.getAuthorities());
-        claims.put(CLAIM_KEY_CREATED, new Date().getTime());
+        claims.put(CLAIM_KEY_CREATED, String.valueOf(new Date().getTime()));
 
         return Jwts.builder()
                 .setClaims(claims)

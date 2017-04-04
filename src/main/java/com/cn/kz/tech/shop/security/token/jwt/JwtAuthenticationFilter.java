@@ -27,7 +27,7 @@ JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        return !nonAuthPath.contains(request.getServletPath());
+        return false;//!nonAuthPath.contains(request.getServletPath());
     }
 
     @Override

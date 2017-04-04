@@ -59,6 +59,7 @@ class App extends React.Component {
             });
         });
     }
+
     // end::follow-2[]
 
     // tag::create[]
@@ -72,6 +73,7 @@ class App extends React.Component {
             })
         })
     }
+
     // end::create[]
 
     // tag::update[]
@@ -93,12 +95,16 @@ class App extends React.Component {
             }
         });
     }
+
+
     // end::update[]
 
     // tag::delete[]
     onDelete(user) {
         client({method: 'DELETE', path: user.entity._links.self.href});
     }
+
+
     // end::delete[]
 
     // tag::navigate[]
@@ -128,6 +134,7 @@ class App extends React.Component {
             });
         });
     }
+
     // end::navigate[]
 
     // tag::update-page-size[]
@@ -136,6 +143,7 @@ class App extends React.Component {
             this.loadFromServer(pageSize);
         }
     }
+
     // end::update-page-size[]
 
     // tag::websocket-handlers[]
@@ -181,8 +189,8 @@ class App extends React.Component {
             });
         });
     }
-    // end::websocket-handlers[]
 
+    // end::websocket-handlers[]
 
     // tag::register-handlers[]
     componentDidMount() {
@@ -193,21 +201,22 @@ class App extends React.Component {
             {route: '/topic/deleteUser', callback: this.refreshCurrentPage}
         ]);
     }
+
     // end::register-handlers[]
 
     render() {
         return (
             <div>
                 <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-                <UsersList    page={this.state.page}
-                              users={this.state.users}
-                              links={this.state.links}
-                              pageSize={this.state.pageSize}
-                              attributes={this.state.attributes}
-                              onNavigate={this.onNavigate}
-                              onUpdate={this.onUpdate}
-                              onDelete={this.onDelete}
-                              updatePageSize={this.updatePageSize}/>
+                <UsersList page={this.state.page}
+                           users={this.state.users}
+                           links={this.state.links}
+                           pageSize={this.state.pageSize}
+                           attributes={this.state.attributes}
+                           onNavigate={this.onNavigate}
+                           onUpdate={this.onUpdate}
+                           onDelete={this.onDelete}
+                           updatePageSize={this.updatePageSize}/>
             </div>
         )
     }
@@ -239,7 +248,7 @@ class CreateDialog extends React.Component {
     render() {
         var inputs = this.props.attributes.map(attribute =>
             <p key={attribute}>
-                <input type="text" placeholder={attribute} ref={attribute} className="field" />
+                <input type="text" placeholder={attribute} ref={attribute} className="field"/>
             </p>
         );
         return (
@@ -287,7 +296,7 @@ class UpdateDialog extends React.Component {
             <p key={this.props.user.entity[attribute]}>
                 <input type="text" placeholder={attribute}
                        defaultValue={this.props.user.entity[attribute]}
-                       ref={attribute} className="field" />
+                       ref={attribute} className="field"/>
             </p>
         );
 
@@ -296,6 +305,7 @@ class UpdateDialog extends React.Component {
         return (
             <div>
                 <a href={"#" + dialogId}>Update</a>
+
                 <div id={dialogId} className="modalDialog">
                     <div>
                         <a href="#" title="Close" className="close">X</a>
@@ -336,6 +346,7 @@ class UsersList extends React.Component {
             ReactDOM.findDOMNode(this.refs.pageSize).value = pageSize.substring(0, pageSize.length - 1);
         }
     }
+
     // end::handle-page-size-updates[]
 
     // tag::handle-nav[]
@@ -343,18 +354,22 @@ class UsersList extends React.Component {
         e.preventDefault();
         this.props.onNavigate(this.props.links.first.href);
     }
+
     handleNavPrev(e) {
         e.preventDefault();
         this.props.onNavigate(this.props.links.prev.href);
     }
+
     handleNavNext(e) {
         e.preventDefault();
         this.props.onNavigate(this.props.links.next.href);
     }
+
     handleNavLast(e) {
         e.preventDefault();
         this.props.onNavigate(this.props.links.last.href);
     }
+
     // end::handle-nav[]
 
     // tag::user-list-render[]
@@ -390,16 +405,15 @@ class UsersList extends React.Component {
                 <input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
                 <table>
                     <tbody>
-                        <tr>
-                            <th>id</th>
-                            <th>firstName</th>
-                            <th>lastName</th>
-                            <th>email</th>
-                            <th>phone</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        {users}
+                    <tr>
+                        <th>firstName</th>
+                        <th>lastName</th>
+                        <th>email</th>
+                        <th>phone</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {users}
                     </tbody>
                 </table>
                 <div>
@@ -413,7 +427,7 @@ class UsersList extends React.Component {
 }
 
 // tag::user[]
-class User extends React.Component{
+class User extends React.Component {
 
     constructor(props) {
         super(props);
@@ -426,22 +440,21 @@ class User extends React.Component{
 
     render() {
         return (
-                <tr>
-                        <td>{this.props.user.entity.id}</td>
-                        <td>{this.props.user.entity.firstName}</td>
-                        <td>{this.props.user.entity.lastName}</td>
-                        <td>{this.props.user.entity.email}</td>
-                        <td>{this.props.user.entity.phone}</td>
-                        <td>
-                            <UpdateDialog user={this.props.user}
-                                          attributes={this.props.attributes}
-                                          onUpdate={this.props.onUpdate}/>
-                        </td>
-                        <td>
-                            <button onClick={this.handleDelete}>Delete</button>
-                        </td>
-                </tr>
-         )
+            <tr>
+                <td>{this.props.user.entity.firstName}</td>
+                <td>{this.props.user.entity.lastName}</td>
+                <td>{this.props.user.entity.email}</td>
+                <td>{this.props.user.entity.phone}</td>
+                <td>
+                    <UpdateDialog user={this.props.user}
+                                  attributes={this.props.attributes}
+                                  onUpdate={this.props.onUpdate}/>
+                </td>
+                <td>
+                    <button onClick={this.handleDelete}>Delete</button>
+                </td>
+            </tr>
+        )
     }
 }
 // end::user[]
