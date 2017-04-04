@@ -20,6 +20,7 @@ import com.cn.kz.tech.shop.repository.AccountRepository;
 import com.cn.kz.tech.shop.security.token.jwt.JwtAuthenticationFilter;
 import com.cn.kz.tech.shop.security.token.jwt.JwtAuthenticationProvider;
 import com.cn.kz.tech.shop.security.token.jwt.JwtAuthenticationSuccessHandler;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,6 +60,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         JwtAuthenticationFilter authenticationTokenFilter = new JwtAuthenticationFilter();
         authenticationTokenFilter.setAuthenticationManager(authenticationManager());
         authenticationTokenFilter.setAuthenticationSuccessHandler(new JwtAuthenticationSuccessHandler());
+		authenticationTokenFilter.setSecuredPath(Sets.newHashSet(
+				"/api/admin"
+				, "/api/users2"
+		));
         return authenticationTokenFilter;
     }
 
@@ -99,7 +104,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeRequests()
-				//.antMatchers("/auth/**").permitAll()
+				.antMatchers("/auth/**").permitAll()
                 //.anyRequest().authenticated();
 				.anyRequest().permitAll();
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(),

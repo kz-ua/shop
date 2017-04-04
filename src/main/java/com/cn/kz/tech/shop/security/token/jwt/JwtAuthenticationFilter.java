@@ -1,6 +1,5 @@
 package com.cn.kz.tech.shop.security.token.jwt;
 
-import com.google.common.collect.Sets;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -10,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,7 +19,7 @@ public class
 
 JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static Set<String> nonAuthPath = Sets.newHashSet("/index.html","/auth");
+    private Set<String> securedPath = new HashSet<>();
 
     public JwtAuthenticationFilter() {
         super("/**");
@@ -27,7 +27,7 @@ JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        return false;//!nonAuthPath.contains(request.getServletPath());
+        return securedPath.contains(request.getServletPath()); //true
     }
 
     @Override
@@ -54,5 +54,9 @@ JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
         // As this authentication is in HTTP header, after success we need to continue the request normally
         // and return the response as if the resource was not secured at all
         chain.doFilter(request, response);
+    }
+
+    public void setSecuredPath(Set<String> securedPath) {
+        this.securedPath = securedPath;
     }
 }
